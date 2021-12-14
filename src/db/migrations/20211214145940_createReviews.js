@@ -4,11 +4,13 @@ exports.up = function(knex) {
         table.increments("review_id").primary();
         table.text("content");
         table.integer("score");
+        table.integer("critic_id").unsigned().notNullable();
         table
             .foreign("critic_id")
             .references("critic_id")
             .inTable("critics")
             .onDelete("CASCADE");
+        table.integer("movie_id").unsigned().notNullable();
         table
             .foreign("movie_id")
             .references("movie_id")
@@ -20,5 +22,5 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTable("reviews");
+    return knex.schema.dropTable("reviews");
 };
