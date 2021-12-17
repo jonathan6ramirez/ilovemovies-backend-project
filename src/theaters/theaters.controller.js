@@ -3,15 +3,12 @@ const theatersService = require("./theaters.service");
 function groupMoviesToTheaters(data) {
     //init array to be returned
     let groupedMovies = [];
-
-    //loop through data
-    //console.log(data);
-    //!groupedMovies.includes(data[i].theater_id)
-    //filter for theater_id
-    //
+    
+    //Loop through 
     for ( let i = 0; i < data.length; i++){
         //data is just there for placeholder for now
-        if (!data){
+        const check = groupedMovies.filter((theater) => theater.theater_id == data[i].theater_id);
+        if (check.length == 0){
             console.log("didnt find the theater")
             const theater = {
                 "theater_id": data[i].theater_id,
@@ -34,13 +31,25 @@ function groupMoviesToTheaters(data) {
             theater.movies.push(movie);
             groupedMovies.push(theater)
         }
-        //else if()
+        else if(data.length > 0){
+            //Create the movie object
+            const movie = {
+                "movie_id": data[i].movie_id,
+                "title": data[i].title,
+                "runtime_in_minutes": data[i].runtime_in_minutes,
+                "rating": data[i].rating,
+                "description": data[i].description,
+                "image_url": data[i].image_url
+            }
+            //Find the index of the theater
+            const index = groupedMovies.findIndex((theater) => theater.theater_id == data[i].theater_id)
+            //Push the movie to the array of the current movie
+            groupedMovies[index].movies.push(movie);
+        }
     }
-        //check to see if the current theater is in the array
-        //if it isnt add it to the array
-        //if it is then just add the movie to the array of movies of the theater
 
     //return the grouped array
+    return groupedMovies;
 }
 
 
