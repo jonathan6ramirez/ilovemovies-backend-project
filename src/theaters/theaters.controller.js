@@ -8,8 +8,8 @@ function groupMoviesToTheaters(data) {
     for ( let i = 0; i < data.length; i++){
         //data is just there for placeholder for now
         const check = groupedMovies.filter((theater) => theater.theater_id == data[i].theater_id);
+
         if (check.length == 0){
-            console.log("didnt find the theater")
             const theater = {
                 "theater_id": data[i].theater_id,
                 "name": data[i].name,
@@ -47,9 +47,9 @@ function groupMoviesToTheaters(data) {
             groupedMovies[index].movies.push(movie);
         }
     }
-
+    console.log(groupedMovies, "this is the data after the movies are grouped together according to the theater_id");
     //return the grouped array
-    return groupedMovies;
+    //return groupedMovies;
 }
 
 
@@ -59,6 +59,7 @@ function list(req, res, next) {
     theatersService
         .list()
         .then((data) => groupMoviesToTheaters(data))
+        .then((data) => res.json(data))
         .catch(next);
 }
 
