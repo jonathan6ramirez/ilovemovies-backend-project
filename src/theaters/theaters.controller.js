@@ -1,14 +1,14 @@
 const theatersService = require("./theaters.service");
+const asynceErrorBoundary = require("../errors/asyncErrorBoundary")
 
 function groupMoviesToTheaters(data) {
     //init array to be returned
     let groupedMovies = [];
-    
-    //Loop through 
+    //Loop through the query data
     for ( let i = 0; i < data.length; i++){
         //data is just there for placeholder for now
         const check = groupedMovies.filter((theater) => theater.theater_id == data[i].theater_id);
-
+        //Checks to see if the theater was found
         if (check.length == 0){
             const theater = {
                 "theater_id": data[i].theater_id,
@@ -28,9 +28,12 @@ function groupMoviesToTheaters(data) {
                 "description": data[i].description,
                 "image_url": data[i].image_url
             }
+            //Push the created movie to the theater object
             theater.movies.push(movie);
+            //Push the created theater object to the groupedTheaters array
             groupedMovies.push(theater)
         }
+        //Check to see if the theater was found
         else if(data.length > 0){
             //Create the movie object
             const movie = {
@@ -47,22 +50,19 @@ function groupMoviesToTheaters(data) {
             groupedMovies[index].movies.push(movie);
         }
     }
-    console.log(groupedMovies, "this is the data after the movies are grouped together according to the theater_id");
     //return the grouped array
-    //return groupedMovies;
+    return groupedMovies;
 }
 
 
 
 
-function list(req, res, next) {
-    theatersService
-        .list()
-        .then((data) => groupMoviesToTheaters(data))
-        .then((data) => res.json(data))
-        .catch(next);
+async function list(req, res, next) {
+    const theaters = await theatersService.list();
+    const data = groupMoviesToTheaters(theaters);
+    res.json({ data });
 }
 
 module.exports = {
-    list,
+    list: asynceErrorBoundary(list),
 }
