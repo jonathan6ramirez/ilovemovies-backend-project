@@ -5,11 +5,13 @@ const app = express();
 //Theaters, movies, and reviews routers
 const theatersRouter = require("./theaters/theaters.router");
 const reviewsRouter = require("./reviews/reviews.router");
+const moviesRouter = require("./movies/movies.router")
 
 app.use(express.json());
 
 app.use("/theaters", theatersRouter);
 app.use("/reviews", reviewsRouter);
+app.use("/movies", moviesRouter);
 
 //Not found handler
 app.use((req, res, next) => {
