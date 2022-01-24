@@ -1,4 +1,3 @@
-//Notes: To find the section that has the query references goto node & express: query and route parameters
 const moviesService = require("./movies.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
