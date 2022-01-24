@@ -3,14 +3,23 @@ const controller = require("./movies.controller");
 const methodNotAllowed = require("../errors/methodNotAllowed");
 const theatersRouter = require("../theaters/theaters.router");
 const reviewsRouter = require("../reviews/reviews.router");
+const cors = require("cors");
 
-router.use("/:movieId/theaters", theatersRouter);
-router.use("/:movieId/reviews", reviewsRouter);
+const corsGet = cors({ methods: "GET" })
 
-router.route("/").get(controller.list).all(methodNotAllowed);
+router.use("/:movieId/theaters", corsGet, theatersRouter)
+    .options(corsGet);
+router.use("/:movieId/reviews", corsGet, reviewsRouter)
+    .options(corsGet);
+
+router.route("/")
+    .get(corsGet, controller.list)
+    .options(corsGet)
+    .all(methodNotAllowed);
 
 router.route("/:movieId([0-9]+)")
-    .get(controller.read);
+    .get(corsGet, controller.read)
+    .options(corsGet);
 
 
 module.exports = router;
